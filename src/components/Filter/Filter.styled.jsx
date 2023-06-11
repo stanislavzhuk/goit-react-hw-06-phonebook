@@ -10,8 +10,7 @@ export const FilterLabel = styled.label`
   `;
 
 export const FilterInput = styled.input`
-  margin-top: 4px;
-  margin-bottom: 20px;
+  margin: 4px 0 20px 0;
   padding: 8px 12px;
 
   font-size: 18px;
@@ -28,5 +27,9 @@ export const FilterInput = styled.input`
   &:hover,
   &:focus {
     outline-color: #f5b05c;
+  }
+
+  @media screen and (min-width: 1024px) {
+    margin-bottom: 0;
   }
   `;

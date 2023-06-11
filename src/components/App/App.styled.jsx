@@ -27,9 +27,13 @@ export const Title = styled.h1`
 `;
 
 export const Contacts = styled.h2`
+  margin: 20px 0;
   font-weight: 700;
   font-size: 35px;
   text-align: center;
+  @media screen and (min-width: 1024px) {
+    margin: 0;
+  }
 `;
 
 export const Info = styled.p`
