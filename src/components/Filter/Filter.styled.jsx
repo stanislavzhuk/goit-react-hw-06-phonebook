@@ -11,6 +11,7 @@ export const FilterLabel = styled.label`
 
 export const FilterInput = styled.input`
   margin-top: 4px;
+  margin-bottom: 20px;
   padding: 8px 12px;
 
   font-size: 18px;
