@@ -1,22 +1,20 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Form, Label, Input, Button } from "./ContactForm.styled";
-import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
+import { getContacts } from 'redux/selectors';
+import { addContact } from 'redux/contactsSlice';
+import { notifyAddContacts, notifyCheckContacts } from 'services/notify';
 
-const ContactForm = ({ onSubmit }) => {
+const ContactForm = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+  const dispatch = useDispatch();
+  const contacts = useSelector(getContacts);
 
   const onChange = e => {
     const { name, value } = e.currentTarget;
     if (name === 'name') setName(value);
-    if (name === 'number') {
-      const phoneNumber = value.replace(/[^\d]/g, '').slice(0, 10);
-      const match = phoneNumber.match(/^(\d{3})(\d{3})(\d{2})(\d{2})$/);
-      const formattedPhoneNumber = match
-        ? `(${match[1]}) ${match[2]}-${match[3]}-${match[4]}`
-        : phoneNumber;
-      setNumber(formattedPhoneNumber);
-    };
+    if (name === 'number') setNumber(value);
   };
 
   const reset = () => {
@@ -26,7 +24,10 @@ const ContactForm = ({ onSubmit }) => {
 
   const onSubmitInput = e => {
     e.preventDefault();
-    onSubmit(name, number);
+    if (contacts.some(contact => contact.name === name)) return notifyCheckContacts(name);
+    
+    dispatch(addContact(name, number));
+    notifyAddContacts(name);
     reset();
   };
 
@@ -39,7 +40,7 @@ const ContactForm = ({ onSubmit }) => {
           name="name"
           value={name}
           onChange={onChange}
-          pattern="^[a-zA-Zа-яА-ЯіІїЇєЄґҐ]+(([' -][a-zA-Zа-яА-ЯіІїЇєЄґҐ ])?[a-zA-Zа-яА-ЯіІїЇєЄґҐ]*)*$"
+          // pattern="^[a-zA-Zа-яА-ЯіІїЇєЄґҐ]+(([' -][a-zA-Zа-яА-ЯіІїЇєЄґҐ ])?[a-zA-Zа-яА-ЯіІїЇєЄґҐ]*)*$"
           title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
           placeholder="Enter contact name"
           required
@@ -52,20 +53,15 @@ const ContactForm = ({ onSubmit }) => {
           name="number"
           value={number}
           onChange={onChange}
-          pattern="\(\d{3}\) \d{3}-\d{2}-\d{2}"
-          title="Pone number must consist of 10 digits. For exemple 0987654321"
-          placeholder="(XXX) XXX XX XX"
-          maxLength="10"
+          // pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+          title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+          placeholder="Enter contact number"
           required
         />
       </Label>
       <Button type="submit">Add contact</Button>
     </Form>
   );
-}
-
-ContactForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
 };
 
 export default ContactForm;
