@@ -24,7 +24,7 @@ const ContactForm = () => {
 
   const onSubmitInput = e => {
     e.preventDefault();
-    if (contacts.some(contact => contact.name === name)) return notifyCheckContacts(name);
+    if (contacts.some(contact => contact.name.toLowerCase() === name.toLowerCase())) return notifyCheckContacts(name);
     
     dispatch(addContact(name, number));
     notifyAddContacts(name);
@@ -40,7 +40,7 @@ const ContactForm = () => {
           name="name"
           value={name}
           onChange={onChange}
-          // pattern="^[a-zA-Zа-яА-ЯіІїЇєЄґҐ]+(([' -][a-zA-Zа-яА-ЯіІїЇєЄґҐ ])?[a-zA-Zа-яА-ЯіІїЇєЄґҐ]*)*$"
+          pattern="^[a-zA-Zа-яА-ЯіІїЇєЄґҐ]+(([' -][a-zA-Zа-яА-ЯіІїЇєЄґҐ ])?[a-zA-Zа-яА-ЯіІїЇєЄґҐ]*)*$"
           title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
           placeholder="Enter contact name"
           required
@@ -53,7 +53,7 @@ const ContactForm = () => {
           name="number"
           value={number}
           onChange={onChange}
-          // pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+          pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
           title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
           placeholder="Enter contact number"
           required
